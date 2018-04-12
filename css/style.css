@@ -2,13 +2,14 @@
 
 * { 
 	margin: 0;
-	padding: 0px;
+	padding: 0;
     font-family: 'Raleway', sans-serif;
 } 
 body { 
 	background: #fff; 
 	margin: 0; 
 	color: #5a5a5a;
+	overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -279,6 +280,7 @@ input {
 }
 
 
+
 #c {
 	background: black;
 	padding: 20px;
@@ -293,5 +295,18 @@ input {
 }
 
 .cont{
-	padding-top: 40px;
+	padding-top: 20px;
 }
+
+/* .file-drop-zone{
+	border: 2px dashed #ddd;
+	padding: 30px;
+	text-align: center;
+	width: 250px;
+}
+.file-drop-zone-over{
+	border: 2px dashed #dddd;
+	padding: 30px;
+	text-align: center;
+	width: 250px;
+} */

@@ -6,7 +6,8 @@ myapp.config(function($routeProvider){
 			templateUrl:"templates/home.html"
 		})
 		.when("/automate",{
-			templateUrl: "templates/automates.html"
+			templateUrl: "templates/automates.html",
+			controller: "controllerAutomate"
 		})
 });
 
