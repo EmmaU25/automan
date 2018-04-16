@@ -2,10 +2,8 @@
 var ets = [];
 var trans = [];
 var back = [];
-var Graph;
-var cont = 0;
 var band = true;
-var automateObject;
+
 //Declaration des classes 
 class Automate{
   constructor(ets,trans){
@@ -51,26 +49,25 @@ myapp.controller("controllerAutomate",function($scope){
   }
 
   $scope.back = function(){
-    if(back.length > 1 && cont < back.length ){
-      cont++;
-      var pos = back.length - cont; 
+    if(back.length > 1){
+      var pos = back.length - 2; 
       const distRatio = 1 + 34/Math.hypot(back[pos].x, back[pos].y, back[pos].z);
       Graph.cameraPosition({x: back[pos].x * distRatio , y: back[pos].y * distRatio ,z: back[pos].z * distRatio},null,3000);
+      back.splice(back.length - 1, 1);
     }else{
-      if(cont === 0){
-        alert("Click on a state to start");
-      }else {
-        alert("You are already where you started");
-      }
+      alert("You are already where you started");
     }
   }
 
   $scope.firstState = function(){
    var v = 1;
+   //Effacer le tableaux et recommencer
+   back.length = 0;
+   band = true;
    Graph.nodeVal(node => {
      const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
       if(v === 1){
-        Graph.cameraPosition({x: node.x * distRatio , y: node.y * distRatio ,z: node.z * distRatio});
+        Graph.cameraPosition({x: node.x * distRatio , y: node.y * distRatio ,z: node.z * distRatio},null,3000);
         var etatB = new etatBack(node.id,node.x,node.y,node.z);
         back.push(etatB);
         v = 2;
@@ -80,6 +77,7 @@ myapp.controller("controllerAutomate",function($scope){
 
 
   $scope.activeFree = function(){
+    alert("You are in free mode, you can choose any automate");
     band = false;
   }
 });
@@ -165,17 +163,16 @@ function parseContent(content) {
         }
     }
 
-automateObject = new Automate(ets,trans);
+var automateObject = new Automate(ets,trans);
 gData = automateObject;
 $("#bar").remove();
 $("#file").remove();
-var elem = document.getElementById('3d-graph');
 Graph = ForceGraph3D()
-  (elem)
+  (document.getElementById('3d-graph'))
   .graphData(gData)
   .backgroundColor('#5C5C5C')
   //.width(window.innerWidth)
-  .height(590)
+  .height(self.innerHeight - 60)
   .nodeId('id')
   .nodeColor('color')
   .nodeLabel('id')
@@ -183,32 +180,21 @@ Graph = ForceGraph3D()
   .enableNodeDrag(false)
   .linkColor('group')
   .onNodeClick(node => { 
-    if(band === true){
-      if(back.length  === 0 ){
-        const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
-        Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-        //console.log("clic sous etat: "+ node.x * distRatio +" - "+node.y * distRatio + " - "+node.z * distRatio);
-        var etatB = new etatBack(node.id,node.x,node.y,node.z);
-        back.push(etatB);
-      }else{
-          if(validationWay(node.id)){
-             const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
-            Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-            var etatB = new etatBack(node.id,node.x,node.y,node.z);
-            back.push(etatB);
-          }else {
-            alert("That's not the correct way");
-          }     
-      } 
-
-    }else{
+    if(back.length  === 0 || !band ){
       const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
       Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-      //console.log("clic sous etat: "+ node.x * distRatio +" - "+node.y * distRatio + " - "+node.z * distRatio);
       var etatB = new etatBack(node.id,node.x,node.y,node.z);
       back.push(etatB);
-    }
-
+    }else{
+      if(validationWay(node.id)){
+         const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
+        Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
+        var etatB = new etatBack(node.id,node.x,node.y,node.z);
+        back.push(etatB);
+      }else {
+        alert("That's not the correct way");
+      }     
+    } 
   })
   .linkDirectionalParticles(3)
   .linkDirectionalParticleWidth(2);

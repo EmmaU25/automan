@@ -216,7 +216,9 @@ input {
 	font-size: 16px;
 }
 
-
+#buttons{
+	text-align:center;
+}
 
 #picton {
 	background: #59ABE3;
