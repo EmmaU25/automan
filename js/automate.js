@@ -1,9 +1,3 @@
-//Declaration variable
-var ets = [];
-var trans = [];
-var back = [];
-var band = true;
-
 //Declaration des classes 
 class Automate{
   constructor(ets,trans){
@@ -39,38 +33,43 @@ class Transition {
 
 //Controlleur de l'application
 myapp.controller("controllerAutomate",function($scope){
+  $scope.band = true;
+  $scope.backs = [];
+  $scope.ets = [];
+  $scope.trans = [];
+
   $scope.parseContent = function($fileContent){
   	 $scope.cont = $fileContent;
-     parseContent($fileContent);
+     $scope.parserCont($fileContent);
   };
 
   $scope.clean = function(){
     location.reload();
-  }
+  };
 
   $scope.back = function(){
-    if(back.length > 1){
-      var pos = back.length - 2; 
-      const distRatio = 1 + 34/Math.hypot(back[pos].x, back[pos].y, back[pos].z);
-      Graph.cameraPosition({x: back[pos].x * distRatio , y: back[pos].y * distRatio ,z: back[pos].z * distRatio},null,3000);
-      back.splice(back.length - 1, 1);
+    if($scope.backs.length > 1){
+      var pos = $scope.backs.length - 2; 
+      const distRatio = 1 + 34/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
+      Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},null,3000);
+      $scope.backs.splice($scope.backs.length - 1, 1);
     }else{
       alert("You are already where you started");
     }
   }
 
   $scope.firstState = function(){
-   var v = 1;
+   var bande = true;
    //Effacer le tableaux et recommencer
-   back.length = 0;
-   band = true;
+   $scope.backs.length = 0;
+   $scope.band = true;
    Graph.nodeVal(node => {
      const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
-      if(v === 1){
+      if(bande){
         Graph.cameraPosition({x: node.x * distRatio , y: node.y * distRatio ,z: node.z * distRatio},null,3000);
         var etatB = new etatBack(node.id,node.x,node.y,node.z);
-        back.push(etatB);
-        v = 2;
+        $scope.backs.push(etatB);
+        bande = false;
       } 
     });
   }	
@@ -78,7 +77,114 @@ myapp.controller("controllerAutomate",function($scope){
 
   $scope.activeFree = function(){
     alert("You are in free mode, you can choose any automate");
-    band = false;
+    $scope.band = false;
+  }
+
+  $scope.camera = function(){
+    const distRatio = 1 + 34/Math.hypot($scope.backs[$scope.backs.length - 1].x, $scope.backs[$scope.backs.length - 1].y, $scope.backs[$scope.backs.length - 1].z);
+    Graph.cameraPosition({x: $scope.backs[$scope.backs.length - 1].x * distRatio , y: $scope.backs[$scope.backs.length - 1].y * distRatio ,z: $scope.backs[$scope.backs.length - 1].z * distRatio},null,3000);
+  }
+
+
+  $scope.parserCont = function(content){
+    //Variables 
+    var gData = {};
+    //Variable qui contient l'info
+    var lines = content.split("\n");
+    //Parcourir tout le fichier
+      for (var i = 0; i < lines.length; i++) {
+        //Pour creer l'onbjet automate
+          if(lines[i].length > 1){
+            if(i == 0){
+              var currentline = lines[i].split("\n");
+              currentline = lines[i].replace(/[\(\)]/g, '');  
+              currentline = currentline.replace(/,/g, '');   
+              currentline = currentline.split(" ");
+              var eta1 = new Etat(parseInt(currentline[1]),'RED');
+              $scope.ets.push(eta1);
+            } else {
+              //variable pour couper chaque ligne du fichier
+              var currentline = lines[i].split("\n");
+                //Enlever les parenthese de la chaine de characters
+                currentline = lines[i].replace(/[\(\)]/g, '');
+                //Enlever les citations de la chaine
+                currentline = currentline.replace(/['"]+/g, '');
+                //Couper la chaine en 3 morceaux
+                currentline = currentline.split(",",3);
+                //Couper le deuxieme atribut pour obtenir le nom de lien et la couleur
+                var label = currentline[1].split(":");
+                //Creation d'un object de type 
+                var tran = new Transition(parseInt(currentline[0]),label[0],label[1],parseInt(currentline[2]));
+                //Ajouter l'object dans l'array
+                $scope.trans.push(tran);
+                 $scope.validate(parseInt(currentline[0]));
+                 $scope.validate(parseInt(currentline[2]));
+            }
+          }
+      }
+
+  var automateObject = new Automate($scope.ets,$scope.trans);
+  gData = automateObject;
+  $("#bar").remove();
+  $("#file").remove();
+  Graph = ForceGraph3D()
+    (document.getElementById('3d-graph'))
+    .graphData(gData)
+    .backgroundColor('#5C5C5C')
+    //.width(window.innerWidth)
+    .height(self.innerHeight - 60)
+    .nodeId('id')
+    .nodeColor('color')
+    .nodeLabel('id')
+    .linkLabel('name')
+    .enableNodeDrag(false)
+    .linkColor('group')
+    .onNodeClick(node => { 
+      if($scope.backs.length  === 0 || !$scope.band ){
+        const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
+        Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
+        var etatB = new etatBack(node.id,node.x,node.y,node.z);
+        $scope.backs.push(etatB);
+      }else{
+        if($scope.validationWay(node.id)){
+           const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
+          Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
+          var etatB = new etatBack(node.id,node.x,node.y,node.z);
+          $scope.backs.push(etatB);
+        }else {
+          alert("That's not the correct way");
+        }     
+      } 
+    })
+    .linkDirectionalParticles(3)
+    .linkDirectionalParticleWidth(2);
+  };
+
+
+  $scope.validate = function(eta){
+    var flag = false;
+    for (var i = 0; i < $scope.ets.length; i++) {
+      if($scope.ets[i].id === eta){
+        flag = true;
+      }
+    }
+
+    if(!flag){
+      const eti = new Etat(eta,'BLUE');
+      $scope.ets.push(eti);
+    }
+  }
+
+  $scope.validationWay = function(etatNext){
+     var flag = false;
+     for (var i = 0; i < $scope.trans.length; i++) {
+       if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id){
+          if($scope.trans[i].target.id === etatNext){
+            flag = true;
+          }
+       }
+     }
+    return flag;
   }
 });
 
@@ -101,113 +207,3 @@ myapp.directive('onReadFile', function ($parse) {
 		}
 	};
 });
-
-
-
-///////////////////////////////////////////////// JAVASCRIPT //////////////////////////////////////////////////////////////////////////
-
-
-//Fonction pour creer un object de type automate
-function validateEtat(eta){
-  var flag = false;
-  for (var i = 0; i < ets.length; i++) {
-    if(ets[i].id === eta){
-      flag = true;
-    }
-  }
-
-  if(!flag){
-    const eti = new Etat(eta,'BLUE');
-    ets.push(eti);
-  }
-}
-
-//Fonction pour parser les donnés TXT en JSON
-function parseContent(content) {
-    //Variables 
-    var gData = {};
-    var tran;
-    var eta1;
-    var label;
-    //Variable qui contient l'info
-    var lines = content.split("\n");
-    //Parcourir tout le fichier
-    for (var i = 0; i < lines.length; i++) {
-      //Pour creer l'onbjet automate
-        if(lines[i].length > 1){
-          if(i == 0){
-            var currentline = lines[i].split("\n");
-            currentline = lines[i].replace(/[\(\)]/g, '');  
-            currentline = currentline.replace(/,/g, '');   
-            currentline = currentline.split(" ");
-            eta1 = new Etat(parseInt(currentline[1]),'RED');
-            ets.push(eta1);
-          } else {
-            //variable pour couper chaque ligne du fichier
-            var currentline = lines[i].split("\n");
-              //Enlever les parenthese de la chaine de characters
-              currentline = lines[i].replace(/[\(\)]/g, '');
-              //Enlever les citations de la chaine
-              currentline = currentline.replace(/['"]+/g, '');
-              //Couper la chaine en 3 morceaux
-              currentline = currentline.split(",",3);
-              //Couper le deuxieme atribut pour obtenir le nom de lien et la couleur
-              label = currentline[1].split(":");
-              //Creation d'un object de type 
-              tran = new Transition(parseInt(currentline[0]),label[0],label[1],parseInt(currentline[2]));
-              //Ajouter l'object dans l'array
-              trans.push(tran);
-              validateEtat(parseInt(currentline[0]));
-              validateEtat(parseInt(currentline[2]));
-          }
-        }
-    }
-
-var automateObject = new Automate(ets,trans);
-gData = automateObject;
-$("#bar").remove();
-$("#file").remove();
-Graph = ForceGraph3D()
-  (document.getElementById('3d-graph'))
-  .graphData(gData)
-  .backgroundColor('#5C5C5C')
-  //.width(window.innerWidth)
-  .height(self.innerHeight - 60)
-  .nodeId('id')
-  .nodeColor('color')
-  .nodeLabel('id')
-  .linkLabel('name')
-  .enableNodeDrag(false)
-  .linkColor('group')
-  .onNodeClick(node => { 
-    if(back.length  === 0 || !band ){
-      const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
-      Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-      var etatB = new etatBack(node.id,node.x,node.y,node.z);
-      back.push(etatB);
-    }else{
-      if(validationWay(node.id)){
-         const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
-        Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-        var etatB = new etatBack(node.id,node.x,node.y,node.z);
-        back.push(etatB);
-      }else {
-        alert("That's not the correct way");
-      }     
-    } 
-  })
-  .linkDirectionalParticles(3)
-  .linkDirectionalParticleWidth(2);
-}
-
-function validationWay(etatNext){
- var flag = false;
- for (var i = 0; i < trans.length; i++) {
-   if(back[back.length-1].id === trans[i].source.id){
-      if(trans[i].target.id === etatNext){
-        flag = true;
-      }
-   }
- }
-return flag;
-}

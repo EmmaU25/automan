@@ -9,8 +9,6 @@
 </nav>
 
 
-
-
 <div id="file">
 	<div style="margin-left: 30px;">Upload a file</div>
 	  <input type="file" accept=".aut" on-read-file="parseContent($fileContent)" style="margin-left: 30px;"/>	
@@ -19,30 +17,35 @@
 <div id="3d-graph"></div>
 
 <div ng-if="cont" class="row" id="buttons">
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button class="btn btn-success btn-lg"  ng-click="firstState()">
 			<span class="glyphicon glyphicon-home"></span> First state
 		</button>
 	</div>
 
-	<div class="col-md-3" >
+	<div class="col-md-2" >
 		<button type="button" class="btn btn-warning btn-lg" ng-click="back()">	
 		      <span class="glyphicon glyphicon-arrow-left"></span> Previous state
 		</button>
 	</div>
 	
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button class="btn btn-danger btn-lg"  ng-click="clean()">
 			<span class="glyphicon glyphicon-trash"></span> Clean
 		</button>
 	</div>
 	
 
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button class="btn btn-primary btn-lg"  ng-click="activeFree()">
 			<span class="glyphicon glyphicon-move"></span> Free mode
 		</button>
 	</div>
-
+	
+	<div class="col-md-2">
+		<button class="btn btn-info btn-lg"  ng-click="camera()">
+			<span class="glyphicon glyphicon-screenshot"></span> Recenter the last state
+		</button>
+	</div>
 	
 </div>
