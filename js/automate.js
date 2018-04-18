@@ -37,11 +37,22 @@ myapp.controller("controllerAutomate",function($scope){
   $scope.backs = [];
   $scope.ets = [];
   $scope.trans = [];
+  $scope.cont = "";
 
   $scope.parseContent = function($fileContent){
   	 $scope.cont = $fileContent;
-     $scope.parserCont($fileContent);
+     //if($scope.checkboxModel){
+      $scope.parserCont($fileContent);
+     /*}else {
+      $scope.neighbourhood();
+     }*/ 
   };
+
+  
+  $scope.neighbourhood = function(){
+    alert("technicals problems :)");
+  }
+
 
   $scope.clean = function(){
     location.reload();
@@ -53,6 +64,7 @@ myapp.controller("controllerAutomate",function($scope){
       const distRatio = 1 + 34/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
       Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},null,3000);
       $scope.backs.splice($scope.backs.length - 1, 1);
+      $scope.table();
     }else{
       alert("You are already where you started");
     }
@@ -68,12 +80,19 @@ myapp.controller("controllerAutomate",function($scope){
       if(bande){
         Graph.cameraPosition({x: node.x * distRatio , y: node.y * distRatio ,z: node.z * distRatio},null,3000);
         var etatB = new etatBack(node.id,node.x,node.y,node.z);
-        $scope.backs.push(etatB);
+        $scope.$apply(function(){
+          $scope.backs.push(etatB);
+        });
         bande = false;
       } 
     });
   }	
 
+  $scope.focusCamera = function(id){
+    const distRatio = 1 + 34/Math.hypot($scope.backs[id].x, $scope.backs[id].y, $scope.backs[id].z);
+    Graph.cameraPosition({x: $scope.backs[id].x * distRatio , y: $scope.backs[id].y * distRatio ,z: $scope.backs[id].z * distRatio},null,3000);
+    $scope.backs.splice(id+1);
+  }
 
   $scope.activeFree = function(){
     alert("You are in free mode, you can choose any automate");
@@ -95,7 +114,7 @@ myapp.controller("controllerAutomate",function($scope){
       for (var i = 0; i < lines.length; i++) {
         //Pour creer l'onbjet automate
           if(lines[i].length > 1){
-            if(i == 0){
+            if(i === 0){
               var currentline = lines[i].split("\n");
               currentline = lines[i].replace(/[\(\)]/g, '');  
               currentline = currentline.replace(/,/g, '');   
@@ -113,17 +132,28 @@ myapp.controller("controllerAutomate",function($scope){
                 currentline = currentline.split(",",3);
                 //Couper le deuxieme atribut pour obtenir le nom de lien et la couleur
                 var label = currentline[1].split(":");
-                //Creation d'un object de type 
-                var tran = new Transition(parseInt(currentline[0]),label[0],label[1],parseInt(currentline[2]));
-                //Ajouter l'object dans l'array
-                $scope.trans.push(tran);
-                 $scope.validate(parseInt(currentline[0]));
-                 $scope.validate(parseInt(currentline[2]));
+                //Couper le neigthboroute
+                if(currentline[0].indexOf("N") != -1){
+                  var neigth = currentline[0].split(":",3);
+                  var tran = new Transition(parseInt(neigth[0]),label[0],label[1],parseInt(currentline[2]));
+                  $scope.trans.push(tran);
+                  $scope.validate(parseInt(currentline[2]));
+                  $scope.neigthB(neigth);
+
+                }else {
+                  //Creation d'un object de type 
+                  var tran = new Transition(parseInt(currentline[0]),label[0],label[1],parseInt(currentline[2]));
+                  //Ajouter l'object dans l'array
+                  $scope.trans.push(tran);
+                   $scope.validate(parseInt(currentline[0]));
+                   $scope.validate(parseInt(currentline[2]));
+                }
             }
           }
       }
 
   var automateObject = new Automate($scope.ets,$scope.trans);
+  console.log(automateObject);
   gData = automateObject;
   $("#bar").remove();
   $("#file").remove();
@@ -131,7 +161,7 @@ myapp.controller("controllerAutomate",function($scope){
     (document.getElementById('3d-graph'))
     .graphData(gData)
     .backgroundColor('#5C5C5C')
-    //.width(window.innerWidth)
+    .width(self.innerWidth - 245)
     .height(self.innerHeight - 60)
     .nodeId('id')
     .nodeColor('color')
@@ -144,13 +174,17 @@ myapp.controller("controllerAutomate",function($scope){
         const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
         Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
         var etatB = new etatBack(node.id,node.x,node.y,node.z);
-        $scope.backs.push(etatB);
+         $scope.$apply(function(){ 
+            $scope.backs.push(etatB);
+         });
       }else{
         if($scope.validationWay(node.id)){
            const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
           Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
           var etatB = new etatBack(node.id,node.x,node.y,node.z);
-          $scope.backs.push(etatB);
+          $scope.$apply(function(){ 
+            $scope.backs.push(etatB);
+          });
         }else {
           alert("That's not the correct way");
         }     
@@ -160,6 +194,56 @@ myapp.controller("controllerAutomate",function($scope){
     .linkDirectionalParticleWidth(2);
   };
 
+  $scope.neigthB = function(etat){
+    var flag = false;
+    for (var i = 0; i < $scope.ets.length; i++) {
+      if($scope.ets[i].id === parseInt(etat[0])){
+        switch (etat[2]) {
+          case "GB":
+            $scope.ets[i].color = '#F3F781';
+            break;
+          case "RB":
+            $scope.ets[i].color = '#F7FE2E';
+            break;
+          case "GR":
+            $scope.ets[i].color = '#AEB404';
+            break;
+          case "GRB":
+            $scope.ets[i].color = '#B3B301';
+            break;
+          default:
+            // statements_def
+            break;
+        }
+        flag = true;
+      }
+    }
+
+    if(!flag){
+      switch (etat[2]) {
+        case "GB":
+          var eti = new Etat(parseInt(etat[0]),'#fdff00');
+          $scope.ets.push(eti);
+          break;
+        case "RB":
+          var eti = new Etat(parseInt(etat[0]),'#dedf1f');
+          $scope.ets.push(eti);
+          break;
+        case "GR":
+          var eti = new Etat(parseInt(etat[0]),'#bebf00');
+          $scope.ets.push(eti);
+          break;
+        case "GRB":
+          var eti = new Etat(parseInt(etat[0]),'#ffff00');
+          $scope.ets.push(eti);
+          break;
+        default:
+          // statements_def
+          break;
+      }
+    }
+
+  }
 
   $scope.validate = function(eta){
     var flag = false;
@@ -177,12 +261,16 @@ myapp.controller("controllerAutomate",function($scope){
 
   $scope.validationWay = function(etatNext){
      var flag = false;
-     for (var i = 0; i < $scope.trans.length; i++) {
-       if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id){
-          if($scope.trans[i].target.id === etatNext){
-            flag = true;
-          }
-       }
+     if($scope.backs[$scope.backs.length-1].id === etatNext){
+      alert("This's the same state");
+     }else{
+       for (var i = 0; i < $scope.trans.length; i++) {
+         if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id){
+            if($scope.trans[i].target.id === etatNext){
+              flag = true;
+            }
+         }
+      }
      }
     return flag;
   }

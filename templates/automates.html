@@ -10,42 +10,79 @@
 
 
 <div id="file">
-	<div style="margin-left: 30px;">Upload a file</div>
-	  <input type="file" accept=".aut" on-read-file="parseContent($fileContent)" style="margin-left: 30px;"/>	
+	<div class="row">
+		<div class="col-md-4">
+			<div style="margin-left: 30px;">Upload a file</div>
+	  		<input type="file" accept=".aut" on-read-file="parseContent($fileContent)" style="margin-left: 30px;"/> 
+		</div>
+
+		<div class="col-md-4">
+			<!-- <label class="checkbox-inline"><input type="checkbox" ng-model="checkboxModel">Neighbourhood</label> -->
+		</div>
+	</div>
+	  
 </div>
 
-<div id="3d-graph"></div>
 
-<div ng-if="cont" class="row" id="buttons">
-	<div class="col-md-2">
-		<button class="btn btn-success btn-lg"  ng-click="firstState()">
-			<span class="glyphicon glyphicon-home"></span> First state
-		</button>
+<div class="row">
+	<div class="col-md-10">
+		<div id="3d-graph"></div>
+		
+		<div ng-if="cont" class="row" id="buttons">
+			<div class="col-md-2">
+				<button class="btn btn-primary "  ng-click="firstState()">
+					<span class="glyphicon glyphicon-home"></span> First state
+				</button>
+			</div>
+
+			<div class="col-md-2" >
+				<button type="button" class="btn btn-warning " ng-click="back()">	
+				      <span class="glyphicon glyphicon-arrow-left"></span> Previous state
+				</button>
+			</div>
+			
+			<div class="col-md-2">
+				<button class="btn btn-danger "  ng-click="clean()">
+					<span class="glyphicon glyphicon-trash"></span> Clean
+				</button>
+			</div>
+			
+
+			<div class="col-md-2">
+				<button class="btn btn-success"  ng-click="activeFree()">
+					<span class="glyphicon glyphicon-move"></span> Free mode
+				</button>
+			</div>
+			
+			<div class="col-md-2">
+				<button class="btn btn-info"  ng-click="camera()">
+					<span class="glyphicon glyphicon-screenshot"></span> Recenter camera
+				</button>
+			</div>
+
+			<div class="col-md-2">
+				<button class="btn btn-default" ng-click="neighbourhood()">
+					<span class="glyphicon glyphicon-eye-open"></span> Neighbourhood
+				</button>
+			</div>
+	    </div>
 	</div>
 
-	<div class="col-md-2" >
-		<button type="button" class="btn btn-warning btn-lg" ng-click="back()">	
-		      <span class="glyphicon glyphicon-arrow-left"></span> Previous state
-		</button>
+	<div class="col-md-2 col-md-offset-0 "  id="liste" ng-if="cont">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-hand-up"></span>  Clicked states <span class="badge"> {{backs.length}} </span>
+            </div>
+            <div class="panel-body">
+                <ul class="chat" id="statesList">
+				  <li class="list-group-item" ng-repeat="x in backs" ng-click="focusCamera($index)">
+				  	[{{$index + 1}}] <strong>id state:</strong> {{x.id}}
+				  </li>
+				</ul>
+            </div>
+    	</div>
 	</div>
-	
-	<div class="col-md-2">
-		<button class="btn btn-danger btn-lg"  ng-click="clean()">
-			<span class="glyphicon glyphicon-trash"></span> Clean
-		</button>
-	</div>
-	
-
-	<div class="col-md-2">
-		<button class="btn btn-primary btn-lg"  ng-click="activeFree()">
-			<span class="glyphicon glyphicon-move"></span> Free mode
-		</button>
-	</div>
-	
-	<div class="col-md-2">
-		<button class="btn btn-info btn-lg"  ng-click="camera()">
-			<span class="glyphicon glyphicon-screenshot"></span> Recenter the last state
-		</button>
-	</div>
-	
 </div>
+
+
+
