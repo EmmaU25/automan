@@ -7,11 +7,12 @@ class Automate{
 }
 
 class etatBack{
-  constructor(id,x,y,z){
+  constructor(id,x,y,z,txt){
     this.id = id;
     this.x = x;
     this.y = y;
     this.z = z;
+    this.txt = txt;
   }
 }
 
@@ -53,7 +54,6 @@ myapp.controller("controllerAutomate",function($scope){
     alert("technicals problems :)");
   }
 
-
   $scope.clean = function(){
     location.reload();
   };
@@ -64,7 +64,7 @@ myapp.controller("controllerAutomate",function($scope){
       const distRatio = 1 + 34/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
       Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},null,3000);
       $scope.backs.splice($scope.backs.length - 1, 1);
-      $scope.table();
+      $scope.backs[$scope.backs.length - 1].txt = null;
     }else{
       alert("You are already where you started");
     }
@@ -92,6 +92,7 @@ myapp.controller("controllerAutomate",function($scope){
     const distRatio = 1 + 34/Math.hypot($scope.backs[id].x, $scope.backs[id].y, $scope.backs[id].z);
     Graph.cameraPosition({x: $scope.backs[id].x * distRatio , y: $scope.backs[id].y * distRatio ,z: $scope.backs[id].z * distRatio},null,3000);
     $scope.backs.splice(id+1);
+    $scope.backs[$scope.backs.length - 1].txt = null;
   }
 
   $scope.activeFree = function(){
@@ -173,7 +174,7 @@ myapp.controller("controllerAutomate",function($scope){
       if($scope.backs.length  === 0 || !$scope.band ){
         const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
         Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-        var etatB = new etatBack(node.id,node.x,node.y,node.z);
+        var etatB = new etatBack(node.id,node.x,node.y,node.z,null);
          $scope.$apply(function(){ 
             $scope.backs.push(etatB);
          });
@@ -181,7 +182,7 @@ myapp.controller("controllerAutomate",function($scope){
         if($scope.validationWay(node.id)){
            const distRatio = 1 + 34/Math.hypot(node.x, node.y, node.z);
           Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
-          var etatB = new etatBack(node.id,node.x,node.y,node.z);
+          var etatB = new etatBack(node.id,node.x,node.y,node.z,null);
           $scope.$apply(function(){ 
             $scope.backs.push(etatB);
           });
@@ -222,19 +223,19 @@ myapp.controller("controllerAutomate",function($scope){
     if(!flag){
       switch (etat[2]) {
         case "GB":
-          var eti = new Etat(parseInt(etat[0]),'#fdff00');
+          var eti = new Etat(parseInt(etat[0]),'#F3F781');
           $scope.ets.push(eti);
           break;
         case "RB":
-          var eti = new Etat(parseInt(etat[0]),'#dedf1f');
+          var eti = new Etat(parseInt(etat[0]),'#F7FE2E');
           $scope.ets.push(eti);
           break;
         case "GR":
-          var eti = new Etat(parseInt(etat[0]),'#bebf00');
+          var eti = new Etat(parseInt(etat[0]),'#AEB404');
           $scope.ets.push(eti);
           break;
         case "GRB":
-          var eti = new Etat(parseInt(etat[0]),'#ffff00');
+          var eti = new Etat(parseInt(etat[0]),'#B3B301');
           $scope.ets.push(eti);
           break;
         default:
@@ -267,6 +268,7 @@ myapp.controller("controllerAutomate",function($scope){
        for (var i = 0; i < $scope.trans.length; i++) {
          if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id){
             if($scope.trans[i].target.id === etatNext){
+              $scope.backs[$scope.backs.length-1].txt = $scope.trans[i].name;
               flag = true;
             }
          }

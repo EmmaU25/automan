@@ -76,7 +76,8 @@
             <div class="panel-body">
                 <ul class="chat" id="statesList">
 				  <li class="list-group-item" ng-repeat="x in backs" ng-click="focusCamera($index)">
-				  	[{{$index + 1}}] <strong>id state:</strong> {{x.id}}
+				  	[{{$index + 1}}] <strong>id state:</strong> {{x.id}} <br/>
+				  	<div ng-hide="x.txt == null"> <strong>Transition: </strong> {{x.txt }}</div>
 				  </li>
 				</ul>
             </div>
