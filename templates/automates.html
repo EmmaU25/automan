@@ -1,48 +1,39 @@
-<nav class="navbar navbar-inverse" id="bar">
+<nav class="navbar navbar-default" id="bar">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#/">
-      	  <span class="glyphicon glyphicon-arrow-left"></span> Accueil
+      	  <span class="glyphicon glyphicon-arrow-left" ></span> Accueil
       </a>
+      <p class="navbar-text">Select you file .aut and see your Automate 3D :)</p>
     </div>
   </div>
 </nav>
 
-
 <div id="file">
-	<div class="row">
-		<div class="col-md-4">
-			<div style="margin-left: 30px;">Upload a file</div>
-	  		<input type="file" accept=".aut" on-read-file="parseContent($fileContent)" style="margin-left: 30px;"/> 
-		</div>
-
-		<div class="col-md-4">
-			<!-- <label class="checkbox-inline"><input type="checkbox" ng-model="checkboxModel">Neighbourhood</label> -->
-		</div>
-	</div>
-	  
+	<div style="margin-left: 30px;">Upload a file</div>
+	<input type="file" accept=".aut" on-read-file="parseContent($fileContent)" style="margin-left: 30px;"/> 
 </div>
-
 
 <div class="row">
 	<div class="col-md-10">
+
 		<div id="3d-graph"></div>
 		
 		<div ng-if="cont" class="row" id="buttons">
 			<div class="col-md-2">
-				<button class="btn btn-primary "  ng-click="firstState()">
+				<button class="btn btn-primary"  ng-click="firstState()">
 					<span class="glyphicon glyphicon-home"></span> First state
 				</button>
 			</div>
 
 			<div class="col-md-2" >
-				<button type="button" class="btn btn-warning " ng-click="back()">	
+				<button type="button" class="btn btn-warning" ng-click="back()">	
 				      <span class="glyphicon glyphicon-arrow-left"></span> Previous state
 				</button>
 			</div>
 			
 			<div class="col-md-2">
-				<button class="btn btn-danger "  ng-click="clean()">
+				<button class="btn btn-danger"  ng-click="clean()">
 					<span class="glyphicon glyphicon-trash"></span> Clean
 				</button>
 			</div>
