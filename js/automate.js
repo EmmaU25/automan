@@ -3,7 +3,7 @@ class Automate{
   constructor(ets,trans){
     this.nodes = ets;
     this.links = trans;
-    }
+  }
 }
 
 class etatBack{
@@ -71,15 +71,11 @@ myapp.controller("controllerAutomate",function($scope){
   };
 
   $scope.back = function(){
-    if($scope.backs.length > 1){
       var pos = $scope.backs.length - 2; 
-      const distRatio = 1 + 34/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
+      const distRatio = 1 + 95/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
       Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},null,3000);
       $scope.backs.splice($scope.backs.length - 1, 1);
       $scope.backs[$scope.backs.length - 1].txt = null;
-    }else{
-      alert("You are already where you started");
-    }
   };
 
   $scope.firstState = function(){
@@ -89,7 +85,7 @@ myapp.controller("controllerAutomate",function($scope){
    $scope.freeMode = false;
     Graph.nodeVal(node => {
       if(bande){
-        const distRatio = 1.50 + 40/Math.hypot(node.x, node.y, node.z);
+        const distRatio = 1.45 + 100/Math.hypot(node.x, node.y, node.z);
         console.log( (node.x * distRatio) +" - "+ (node.y * distRatio) +" - "+ (node.y * distRatio));
         Graph.cameraPosition({x: node.x * distRatio , y: node.y * distRatio ,z: node.z * distRatio},node,3000);
         var etatB = new etatBack(node.id,node.x,node.y,node.z);
@@ -99,22 +95,21 @@ myapp.controller("controllerAutomate",function($scope){
     });
   };
 
-
   $scope.focusCamera = function(id){
-    const distRatio = 1 + 34/Math.hypot($scope.backs[id].x, $scope.backs[id].y, $scope.backs[id].z);
+    const distRatio = 1 + 95/Math.hypot($scope.backs[id].x, $scope.backs[id].y, $scope.backs[id].z);
     Graph.cameraPosition({x: $scope.backs[id].x * distRatio , y: $scope.backs[id].y * distRatio ,z: $scope.backs[id].z * distRatio},null,3000);
     $scope.backs.splice(id+1);
     $scope.backs[$scope.backs.length - 1].txt = null;
   };
 
   $scope.activeFree = function(){
-    alert("You are in explore mode, you can choose any state");
+    alert("You are in explore mode, you can choose any state.");
     $scope.backs.length = 0;
     $scope.freeMode = true;
   };
 
   $scope.camera = function(){
-    const distRatio = 1 + 34/Math.hypot($scope.backs[$scope.backs.length - 1].x, $scope.backs[$scope.backs.length - 1].y, $scope.backs[$scope.backs.length - 1].z);
+    const distRatio = 1 + 95/Math.hypot($scope.backs[$scope.backs.length - 1].x, $scope.backs[$scope.backs.length - 1].y, $scope.backs[$scope.backs.length - 1].z);
     Graph.cameraPosition({x: $scope.backs[$scope.backs.length - 1].x * distRatio , y: $scope.backs[$scope.backs.length - 1].y * distRatio ,z: $scope.backs[$scope.backs.length - 1].z * distRatio},null,3000);
   }
 
@@ -153,7 +148,7 @@ myapp.controller("controllerAutomate",function($scope){
   $scope.clkInitialState =  function(){
     $scope.backs.length = 0;
     $scope.freeMode = false;
-    Graph.width(self.innerWidth - 495);
+    alert("You can choose a new initial state for your path.");
   };
 
   $scope.parserCont = function(content){
@@ -221,8 +216,7 @@ myapp.controller("controllerAutomate",function($scope){
     .enableNodeDrag(false)
     .linkColor('group')
     .onNodeClick(node => {
-
-      const distRatio = 1 + 50/Math.hypot(node.x, node.y, node.z);
+      const distRatio = 1 + 95/Math.hypot(node.x, node.y, node.z);
       console.log( (node.x * distRatio) +" - "+ (node.y * distRatio) +" - "+ (node.y * distRatio));
       var etatB; 
       if($scope.backs.length === 0 && !$scope.freeMode && !$scope.counter){
@@ -236,12 +230,14 @@ myapp.controller("controllerAutomate",function($scope){
           Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
           etatB = new etatBack(node.id,node.x,node.y,node.z,null);
           $scope.$apply(function(){$scope.backs.push(etatB);});
-        }else if($scope.validationCounter(node.id) && $scope.validationWay(node.id)){
+        }else if($scope.validationCounter(node.id) && $scope.validationWayCounter(node.id)){
           Graph.cameraPosition({ x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },node, 3000); 
           etatB = new etatBack(node.id,node.x,node.y,node.z,null);
           $scope.$apply(function(){ $scope.backs.push(etatB);});
-        }else{
-          alert("The state does not belong to the counter example or is not the correct address");
+        }else if(!$scope.validationCounter(node.id)){
+          alert("You must choose a state that belongs to the counterexample.");
+        }else if(!$scope.validationWayCounter(node.id)) {
+          alert("You must choose a successor state of your current state.");
         }
       }else{
         if($scope.validationWay(node.id)){
@@ -249,7 +245,7 @@ myapp.controller("controllerAutomate",function($scope){
           etatB = new etatBack(node.id,node.x,node.y,node.z,null);
           $scope.$apply(function(){ $scope.backs.push(etatB);});
         }else {
-          alert("That's not the correct way");
+          alert("You must choose a successor state of your current state.");
         }     
       } 
     })
@@ -345,7 +341,7 @@ myapp.controller("controllerAutomate",function($scope){
   $scope.validationWay = function(etatNext){
     var flag = false;
     if($scope.backs[$scope.backs.length-1].id === etatNext){
-      alert("This's the same state");
+      alert("This is already your current state.");
     }else{
      for (var i = 0; i < $scope.trans.length; i++) {
        if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id && $scope.trans[i].target.id === etatNext){
@@ -356,7 +352,24 @@ myapp.controller("controllerAutomate",function($scope){
     }
     return flag;
   }
+
+   $scope.validationWayCounter = function(etatNext){
+      var flag = false;
+      if($scope.backs[$scope.backs.length-1].id === etatNext){
+        alert("This is already your current state.");
+      }else{
+       for (var i = 0; i < $scope.trans.length; i++) {
+         if($scope.backs[$scope.backs.length-1].id === $scope.trans[i].source.id && $scope.trans[i].target.id === etatNext && $scope.trans[i].group === "#FFFF00"){
+            $scope.backs[$scope.backs.length-1].txt = $scope.trans[i].name;
+            flag = true;
+          }
+        } 
+      }
+      return flag;
+    }
+
 });
+
 
 //Directive pour lire le fichier TXT
 myapp.directive('onReadFile', function ($parse) {
