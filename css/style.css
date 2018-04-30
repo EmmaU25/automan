@@ -10,6 +10,7 @@ body {
 	margin: 0; 
 	color: #5a5a5a;
 	overflow-x: hidden;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -17,6 +18,9 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: 700;
 }
 
+.margin-img{
+	margin-left: 5px;
+}
 
 p { 
 	padding: 0; 
@@ -29,11 +33,6 @@ p {
 	margin-top: 10px; 
 }
 
-html,
-body {
-	height: 100%;
-}
-
 .alignleft { float: left; }
 .alignright { float: right; }
 .aligncenter {
@@ -42,13 +41,17 @@ body {
 	display: block;
 	clear: both;
 }
-.centered {text-align: center}
+.centered {text-align: center; margin-bottom: 0px}
 .mt {margin-top: 50px;}
 .mb {margin-bottom: 50px;}
 .mtb {margin-top: 50px; margin-bottom: 50px;}
 .mtb2 { margin-top: 100px; margin-bottom: 100px;}
 .ptb {padding-top: 80px; padding-bottom: 80px;}
 
+.files{
+	margin-top: 0px;
+	word-wrap: break-word;
+}
 .clear {
 	clear: both;
 	display: block;
@@ -68,8 +71,7 @@ body {
 	background:#2B2E31;
 }
 *,
-*:after,
-*:before {
+*:after,*:before {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -87,8 +89,7 @@ a {
 	transition: background-color .4s linear, color .4s linear;
 	color: #1abc9c;
 }
-a:hover,
-a:focus {
+a:hover, a:focus {
   text-decoration: none;
   color:#696E74;
 }
@@ -98,10 +99,6 @@ a:focus {
 	margin: 0px;
 }
 
-.navbar-inverse {
-	background: transparent;
-	border: transparent;
-}
 
 img {
 	padding-bottom: 10px;
@@ -120,6 +117,28 @@ input {
 	transition: background-color 0.2s;
 }
 
+.circle {
+	width: 10px;
+	height: 10px;
+	background: red;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+}
+
+.tops{
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.etats{
+  width: 40px; height: 50px;
+}
+
+.links{
+	width: 70px;
+}
 .subscribe-input {
 	float: left;
 	width: 65%;
@@ -215,11 +234,6 @@ input {
 	color: #9f9f9f;
 	font-size: 16px;
 }
-
-#buttons{
-	text-align:center;
-}
-
 #picton {
 	background: #59ABE3;
 	width: 100%;
@@ -281,8 +295,6 @@ input {
 	color: white;
 }
 
-
-
 #c {
 	background: black;
 	padding: 20px;
@@ -300,88 +312,62 @@ input {
 	padding-top: 20px;
 }
 
-.chat
-		{
-		    list-style: none;
-		    margin: 0;
-		    padding: 0;
-		    overflow-x: hidden;
-			overflow-y: auto;
-		}
-		
-		.panel-body{
-			height: 490px;
-			overflow-x: hidden;
-			overflow-y: auto;
-		}
-		
-		#bar-chat{
-			position: absolute;
-		}
-
-		.img-circle{
-			width: 20px;
-			height: 20px;
-		}
-		.chat li
-		{
-		    margin-bottom: 10px;
-		    padding-bottom: 5px;
-		    border-bottom: 1px dotted #B3A9A9;
-
-		}
-
-		.chat li.left .chat-body
-		{
-		    margin-left: 60px;
-		}
-		
-		.chat li.right .chat-body
-		{
-		    margin-right: 60px;
-		}
-
-
-		.chat li .chat-body p
-		{
-		    margin: 0;
-		    color: #777777;
-		}	
-		
-		.outPadding [class*="col-"] {
-		    padding: 0;
-		}
-
-		#liste{
-			margin-top: 5px;
-		}
-		::-webkit-scrollbar-track
-		{
-		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-		    background-color: #F5F5F5;
-		}
-
-		::-webkit-scrollbar
-		{
-		    width: 12px;
-		    background-color: #F5F5F5;
-		}
-
-		::-webkit-scrollbar-thumb
-		{
-		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-		    background-color: #555;
-		}
-
-/* .file-drop-zone{
-	border: 2px dashed #ddd;
-	padding: 30px;
-	text-align: center;
-	width: 250px;
+.chat{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+	overflow-y: auto;
 }
-.file-drop-zone-over{
-	border: 2px dashed #dddd;
-	padding: 30px;
-	text-align: center;
-	width: 250px;
-} */
+
+.panel-body{
+	height: 430px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#bar-chat{
+	position: absolute;
+}
+
+.img-circle{
+	width: 20px;
+	height: 20px;
+}
+.chat li
+{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 60px;
+}
+
+.chat li.right .chat-body
+{
+    margin-right: 60px;
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+    color: #777777;
+}	
+
+.outPadding [class*="col-"] {
+    padding: 0;
+}
+
+#liste{
+	margin-top: 5px;
+}
+
+#legend{
+	border-style: dotted;	
+}
+
