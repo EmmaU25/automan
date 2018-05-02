@@ -9,6 +9,12 @@ myapp.config(function($routeProvider){
 			templateUrl: "templates/automates.html",
 			controller: "controllerAutomate"
 		})
+		.when('/404',{
+			templateUrl: 'templates/404.html',
+		})
+		.otherwise({
+			redirectTo:'/404',
+		})
 });
 
 
