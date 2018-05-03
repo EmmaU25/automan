@@ -64,7 +64,7 @@ myapp.controller("controllerAutomate",function($scope){
   $scope.back = function(){
     var pos = $scope.backs.length - 2; 
     const distRatio = 1 + 95/Math.hypot($scope.backs[pos].x, $scope.backs[pos].y, $scope.backs[pos].z);
-    Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},null,3000);
+    Graph.cameraPosition({x: $scope.backs[pos].x * distRatio , y: $scope.backs[pos].y * distRatio ,z: $scope.backs[pos].z * distRatio},$scope.backs[pos],3000);
     $scope.backs.splice($scope.backs.length - 1, 1);
     $scope.backs[$scope.backs.length - 1].txt = null;
   };
@@ -73,14 +73,14 @@ myapp.controller("controllerAutomate",function($scope){
    $scope.backs.length = 0;
    $scope.freeMode = false;
    const distRatio = 1 + 95/Math.hypot($scope.gData.nodes[0].x, $scope.gData.nodes[0].y, $scope.gData.nodes[0].z);
-   Graph.cameraPosition({x: $scope.gData.nodes[0].x * distRatio , y: $scope.gData.nodes[0].y * distRatio ,z: $scope.gData.nodes[0].z * distRatio},null,3000); 
+   Graph.cameraPosition({x: $scope.gData.nodes[0].x * distRatio , y: $scope.gData.nodes[0].y * distRatio ,z: $scope.gData.nodes[0].z * distRatio},$scope.gData.nodes[0],3000); 
    var etatB = new etatBack($scope.gData.nodes[0].id,$scope.gData.nodes[0].x,$scope.gData.nodes[0].y,$scope.gData.nodes[0].z);
    $scope.backs.push(etatB); 
   };
 
   $scope.focusCamera = function(id){
     const distRatio = 1 + 95/Math.hypot($scope.backs[id].x, $scope.backs[id].y, $scope.backs[id].z);
-    Graph.cameraPosition({x: $scope.backs[id].x * distRatio , y: $scope.backs[id].y * distRatio ,z: $scope.backs[id].z * distRatio},null,3000);
+    Graph.cameraPosition({x: $scope.backs[id].x * distRatio , y: $scope.backs[id].y * distRatio ,z: $scope.backs[id].z * distRatio},$scope.backs[id],3000);
     $scope.backs.splice(id+1);
     $scope.backs[$scope.backs.length - 1].txt = null;
   };
@@ -93,7 +93,7 @@ myapp.controller("controllerAutomate",function($scope){
 
   $scope.camera = function(){
     const distRatio = 1 + 95/Math.hypot($scope.backs[$scope.backs.length - 1].x, $scope.backs[$scope.backs.length - 1].y, $scope.backs[$scope.backs.length - 1].z);
-    Graph.cameraPosition({x: $scope.backs[$scope.backs.length - 1].x * distRatio , y: $scope.backs[$scope.backs.length - 1].y * distRatio ,z: $scope.backs[$scope.backs.length - 1].z * distRatio},null,3000);
+    Graph.cameraPosition({x: $scope.backs[$scope.backs.length - 1].x * distRatio , y: $scope.backs[$scope.backs.length - 1].y * distRatio ,z: $scope.backs[$scope.backs.length - 1].z * distRatio},$scope.backs[$scope.backs.length - 1],3000);
   }
 
   $scope.parseContre = function(cont){
