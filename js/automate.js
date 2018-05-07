@@ -33,7 +33,7 @@ class Transition {
 }
 
 myapp.controller("controllerAutomate",function($scope){
-  $scope.backs = [],$scope.ets = [], $scope.trans = [], $scope.gData  = {}, $scope.freeMode = false, $scope.isDisabled = true, $scope.doIt = false, $scope.btns = false, $scope.counter = false, $scope.sinkState = false;
+  $scope.backs = [],$scope.ets = [], $scope.trans = [], $scope.gData = {}, $scope.freeMode = false, $scope.isDisabled = true, $scope.doIt = false, $scope.btns = false, $scope.counter = false, $scope.sinkState = false;
 
   $scope.parseContent = function($fileContent){   
     if($scope.isDisabled){
@@ -47,6 +47,32 @@ myapp.controller("controllerAutomate",function($scope){
       $scope.counter = true;
     }
   };
+
+  /*$scope.screenshoot = function(){
+    html2canvas(document.getElementById("3d-graph")).then(function(canvas) {
+     $scope.saveAs(canvas.toDataURL(), 'automate.png');
+    });
+  };
+
+
+  $scope.saveAs =  function(uri, filename) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+
+      //Firefox requires the link to be in the body
+      document.body.appendChild(link);
+
+      //simulate click
+      link.click();
+
+      //remove the link when done
+      document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  };*/
 
   $scope.yes = function(){
     $scope.isDisabled = false;
@@ -172,13 +198,13 @@ myapp.controller("controllerAutomate",function($scope){
     Graph = ForceGraph3D()
       (document.getElementById('3d-graph'))
       .graphData($scope.gData)
-      .backgroundColor('#5C5C5C')
+      .backgroundColor('#D8D8D8')
       .width(self.innerWidth - 495)
       .height(self.innerHeight - 70)
       .nodeId('id')
       .nodeColor('color')
-      .nodeLabel('id')
-      .linkLabel('name')
+      .nodeLabel(d =>`<span style="color: black">${d.id}</span>`)
+      .linkLabel(d =>`<span style="color: ${d.group}">${d.name}</span>`)
       .enableNodeDrag(false)
       .linkColor('group')
       .onNodeClick(node => {
@@ -288,7 +314,7 @@ myapp.controller("controllerAutomate",function($scope){
 
     if(!flag){
       if(eta === -1){
-        eti = new Etat(eta,' #D8D8D8',false);
+        eti = new Etat(eta,'GREEN',false);
         $scope.sinkState = true;
         $scope.ets.push(eti);
       }else{

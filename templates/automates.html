@@ -9,6 +9,7 @@
   </div>
 </nav>
 
+<screenshot is-open="appCtrl.isBasicOpen">
 <div id="file" ng-hide="doIt">
 	<div class="container">
 		<div class="row" >
@@ -38,6 +39,7 @@
 </div>
 
 <div class="row tops">
+
 	<div class="col-md-2 centered" ng-if="doIt">
 		<div id="legend">
 			<h2><strong>Legend</strong></h2>
@@ -47,7 +49,7 @@
 			</div>
 			
 			<div class="row" ng-if="sinkState">
-				<div class="col-md-6"><img class="etats" src="./images/puis.png" alt=""></div>
+				<div class="col-md-6"><img class="etats" src="./images/puisi.png" alt=""></div>
 				<div class="col-md-6">Sink State</div>
 			</div>
 
@@ -96,7 +98,9 @@
 	</div>
 
 	<div class="col-md-8">
-		<div id="3d-graph"></div>
+		
+			<div id="3d-graph"></div>
+		
 	</div>
 
 	<div class="col-md-2 col-md-offset-0 " ng-if="doIt">
@@ -157,6 +161,15 @@
 					<span class="glyphicon glyphicon-move"></span> Explore LTS
 				</button>
 			</div>
+
+			<div class="col-md-2">	
+				<button class="btn btn-fab" ng-class="{true: 'btn-danger', false: 'btn-default'}[appCtrl.isBasicOpen]" ng-click="appCtrl.isBasicOpen = !appCtrl.isBasicOpen">
+                                <i ng-if="!appCtrl.isBasicOpen" class="material-icons">crop</i>
+                                <i ng-if="appCtrl.isBasicOpen" class="material-icons">close</i>
+                </button>
+			</div>
 	    </div>
 </div>
+
+</screenshot>
 
