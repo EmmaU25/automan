@@ -199,7 +199,7 @@ myapp.controller("controllerAutomate",function($scope){
       (document.getElementById('3d-graph'))
       .graphData($scope.gData)
       .backgroundColor('#D8D8D8')
-      .width(self.innerWidth - 495)
+      .width(self.innerWidth - 500)
       .height(self.innerHeight - 70)
       .nodeId('id')
       .nodeColor('color')
