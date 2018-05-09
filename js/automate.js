@@ -48,7 +48,7 @@ myapp.controller("controllerAutomate",function($scope){
     }
   };
 
-  /*$scope.screenshoot = function(){
+$scope.screenshoot = function(){
     html2canvas(document.getElementById("3d-graph")).then(function(canvas) {
      $scope.saveAs(canvas.toDataURL(), 'automate.png');
     });
@@ -72,7 +72,7 @@ myapp.controller("controllerAutomate",function($scope){
     } else {
       window.open(uri);
     }
-  };*/
+  };
 
   $scope.yes = function(){
     $scope.isDisabled = false;
