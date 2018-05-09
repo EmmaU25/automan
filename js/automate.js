@@ -48,13 +48,13 @@ myapp.controller("controllerAutomate",function($scope){
     }
   };
 
-$scope.screenshoot = function(){
+/*$scope.screenshoot = function(){
     html2canvas(document.getElementById("3d-graph")).then(function(canvas) {
-     $scope.saveAs(canvas.toDataURL(), 'automate.png');
+      return Canvas2Image.saveAsPNG(canvas);
     });
-  };
+  };*/
 
-
+/*
   $scope.saveAs =  function(uri, filename) {
     var link = document.createElement('a');
     if (typeof link.download === 'string') {
@@ -72,7 +72,7 @@ $scope.screenshoot = function(){
     } else {
       window.open(uri);
     }
-  };
+  };*/
 
   $scope.yes = function(){
     $scope.isDisabled = false;

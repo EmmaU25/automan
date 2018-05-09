@@ -1,4 +1,4 @@
-var myapp = angular.module('automate', ["ngRoute","angular-screenshot"]);
+var myapp = angular.module('automate', ["ngRoute"]);
 
 myapp.config(function($routeProvider){
 	$routeProvider
@@ -7,7 +7,7 @@ myapp.config(function($routeProvider){
 		})
 		.when("/automate",{
 			templateUrl: "templates/automates.html",
-			controller: "controllerAutomate as appCtrl"
+			controller: "controllerAutomate"
 		})
 		.when('/404',{
 			templateUrl: 'templates/404.html'
