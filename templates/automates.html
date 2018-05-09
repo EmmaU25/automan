@@ -9,13 +9,13 @@
   </div>
 </nav>
 
-<screenshot is-open="appCtrl.isBasicOpen">
+<!-- <screenshot is-open="appCtrl.isBasicOpen"> -->
 <div id="file" ng-hide="doIt">
 	<div class="container">
 		<div class="row" >
 			<div class="col-md-4">
 				<div>Upload a LTS file.</div>
-				<input type="file"  id="graphAutomate" ng-disabled="!isDisabled" accept=".aut" on-read-file="parseContent($fileContent)"/> 
+				<input type="file"  id="graphAutomate" ng-disabled="!isDisabled" accept=".autx" on-read-file="parseContent($fileContent)"/> 
 			</div>
 
 			<div class="col-md-4 centered" ng-show="btns" >
@@ -161,15 +161,20 @@
 					<span class="glyphicon glyphicon-move"></span> Explore LTS
 				</button>
 			</div>
-
-			<div class="col-md-2">	
-				<button class="btn btn-fab" ng-class="{true: 'btn-danger', false: 'btn-default'}[appCtrl.isBasicOpen]" ng-click="appCtrl.isBasicOpen = !appCtrl.isBasicOpen">
+<!--<div class="col-md-2">
+	<button class="btn btn-success"  ng-click="screenshoot()">
+		<span class="glyphicon glyphicon-move"></span> Screenshoot
+	</button>
+</div>
+ -->
+<!-- 			<div class="col-md-2">	
+	<button class="btn btn-fab" ng-class="{true: 'btn-danger', false: 'btn-default'}[appCtrl.isBasicOpen]" ng-click="appCtrl.isBasicOpen = !appCtrl.isBasicOpen">
                                 <i ng-if="!appCtrl.isBasicOpen" class="material-icons">crop</i>
                                 <i ng-if="appCtrl.isBasicOpen" class="material-icons">close</i>
                 </button>
-			</div>
+</div> -->
 	    </div>
 </div>
 
-</screenshot>
+<!-- </screenshot> -->
 
