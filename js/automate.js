@@ -213,8 +213,9 @@ myapp.controller("controllerAutomate",function($scope){
   
   $scope.draw = function(){
     var automateObject = new Automate($scope.ets,$scope.trans);
-    var wid = screen.width - 495;
-    var hei = screen.height - 200;
+    var wid = $("#graph").width();
+    var hei = $(window).height() - 70;
+    //console.log("taille:"+ wid + " - " + hei);
     $scope.gData = automateObject;
     Graph = ForceGraph3D()
       (document.getElementById('3d-graph'))
