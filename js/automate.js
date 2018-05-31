@@ -213,13 +213,15 @@ myapp.controller("controllerAutomate",function($scope){
   
   $scope.draw = function(){
     var automateObject = new Automate($scope.ets,$scope.trans);
+    var wid = screen.width - 495;
+    var hei = screen.height - 200;
     $scope.gData = automateObject;
     Graph = ForceGraph3D()
       (document.getElementById('3d-graph'))
       .graphData($scope.gData)
       .backgroundColor('#D8D8D8')
-      .width(screen.width - 495)
-      .height(screen.height - 200)
+      .width(wid)
+      .height(hei)
       .nodeId('id')
       .nodeColor('color')
       .nodeLabel(d =>`<span style="color: black">${d.id}</span>`)
